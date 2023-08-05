@@ -10,7 +10,7 @@ class EmpleadoRepository implements EmpleadoRepositoryInterface
     public function getAllEmpleados()
     {
         return Empleado::select('empleados.*','departamentos.name as departamento')
-        ->join('departamento','departamento.id','=','empleados.departamento_id')
+        ->join('departamentos','departamentos.id','=','empleados.departament_id')
         ->paginate(10);
     }
 

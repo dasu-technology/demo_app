@@ -10,13 +10,18 @@ use Illuminate\Support\Facades\Validator;
 
 class EmpleadoController extends Controller
 {
+    protected EmpleadoRepositoryInterface $empleadoRepository;
+
+    public function __construct(EmpleadoRepositoryInterface $empleadoRepository)
+    {
+        $this->empleadoRepository = $empleadoRepository;
+    }
    
     public function index()
     {
-       $empleados = Empleado::select('empleados.*','departamentos.name as departamento')
-       ->join('departamentos','departamentos.id','=','empleados.departament_id')
-       ->paginate(10);
-       return response()->json($empleados);
+      return response()->json([
+            'data' => $this->empleadoRepository->getAllEmpleados()
+        ]);
     }
 
     public function store(Request $request)
