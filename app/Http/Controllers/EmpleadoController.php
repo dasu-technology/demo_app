@@ -11,7 +11,7 @@ class EmpleadoController extends Controller
     public function index()
     {
        $empleados = Empleado::select('empleados.*','departamentos.name as departamento')
-       ->join('departamento','departamento.id','=','empleados.departamento_id')
+       ->join('departamentos','departamentos.id','=','empleados.departament_id')
        ->paginate(10);
        return response()->json($empleados);
     }
@@ -31,6 +31,8 @@ class EmpleadoController extends Controller
                 'menssage'=>$validator->errors()->all()
             ],400); 
         }
+        $empleado= new Empleado($request->input());
+        $empleado->save();
         return response()->json([
             'status'=>true,
             'menssage'=>'Empleado creado satisfactoriamente.'
@@ -73,20 +75,20 @@ class EmpleadoController extends Controller
         ],200);
     }
 
-    public function empleadoDepartamento(){
+    /*public function empleadoDepartamento(){
         $empleados = Empleado::select(DB::raw('count(empleados.id) as count',
         'departamentos.name'))
-        ->join('departamentos','departamentos.id','=','empleados.departamento_id')
+        ->join('departamentos','departamentos.id','=','empleados.departament_id')
         ->groupBy('departamentos.name')
         ->get();
         
         return response()->json($empleados);
-    }
+    }*/
 
     public function findAll()
     {
        $empleados = Empleado::select('empleados.*','departamentos.name as departamento')
-       ->join('departamento','departamento.id','=','empleados.departamento_id')
+       ->join('departamentos','departamentos.id','=','empleados.departament_id')
        ->get();
        return response()->json($empleados);
     }

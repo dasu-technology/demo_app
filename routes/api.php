@@ -20,17 +20,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::controller(DepartamentoController::class)->group(function () {
-    Route::get('/departamento/{id}', 'show');
-    Route::get('/departamentos', 'index');
-    Route::post('/departamento', 'store');
-    
-});
-
+Route::resource('departamentos', DepartamentoController::class);
+Route::resource('empleados', EmpleadoController::class);
 Route::controller(EmpleadoController::class)->group(function () {
-    Route::get('/empleado/{id}', 'show');
-    Route::get('/empleados', 'index');
-    Route::post('/empleado', 'store');
+   /* Route::get('/empleadoDepartamento}', 'empleadoDepartamento');*/
+    Route::get('/employeAll', 'findAll');
 });
 
