@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Interfaces\EmpleadoRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
@@ -8,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class EmpleadoController extends Controller
 {
+   
     public function index()
     {
        $empleados = Empleado::select('empleados.*','departamentos.name as departamento')
