@@ -25,6 +25,7 @@ Route::controller(DepartamentoController::class)->group(function () {
     Route::get('/departamento/{id}', 'show');
     Route::get('/departamentos', 'index');
     Route::post('/departamento', 'store');
+    
 });
 
 Route::controller(EmpleadoController::class)->group(function () {

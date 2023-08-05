@@ -1,16 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use BD;
+use Illuminate\Support\Facades\DB;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class EmpleadoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
        $empleados = Empleado::select('empleados.*','departamentos.name as departamento')
@@ -19,9 +16,6 @@ class EmpleadoController extends Controller
        return response()->json($empleados);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $rules= [
@@ -43,17 +37,11 @@ class EmpleadoController extends Controller
         ],200); 
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Empleado $empleado)
     {
         return response()->json($empleado, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Empleado $empleado)
     {
         $rules= [
@@ -76,9 +64,6 @@ class EmpleadoController extends Controller
         ],200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Empleado $empleado)
     {
         $empleado->delete();
@@ -88,5 +73,21 @@ class EmpleadoController extends Controller
         ],200);
     }
 
-    
+    public function empleadoDepartamento(){
+        $empleados = Empleado::select(DB::raw('count(empleados.id) as count',
+        'departamentos.name'))
+        ->join('departamentos','departamentos.id','=','empleados.departamento_id')
+        ->groupBy('departamentos.name')
+        ->get();
+        
+        return response()->json($empleados);
+    }
+
+    public function findAll()
+    {
+       $empleados = Empleado::select('empleados.*','departamentos.name as departamento')
+       ->join('departamento','departamento.id','=','empleados.departamento_id')
+       ->get();
+       return response()->json($empleados);
+    }
 }
