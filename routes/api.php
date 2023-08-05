@@ -24,6 +24,8 @@ Route::resource('departamentos', DepartamentoController::class);
 Route::resource('empleados', EmpleadoController::class);
 Route::controller(EmpleadoController::class)->group(function () {
    /* Route::get('/empleadoDepartamento}', 'empleadoDepartamento');*/
-    Route::get('/employeAll', 'findAll');
+    Route::get('/empleado/{id}','show');
+    Route::put('empleado/{id}','update');
+    Route::delete('empleado/{id}','destroy');
 });
 
