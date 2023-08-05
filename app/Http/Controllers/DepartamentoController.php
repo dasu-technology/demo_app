@@ -38,8 +38,16 @@ class DepartamentoController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Departamento $departamento)
-    {
-        //
+    { $rules = ['name' => 'required|string|min:1|max:100'];
+        $validatior= FacadesValidator::make($request->input(),$rules);
+        if ($validatior->fails()){
+            return response()->json([
+                'status' => true,
+                'errors' => $validatior->errors()->all()
+            ], 400);
+        }
+        $departamento->update($request->input());
+        return response()->json(['status' => true,'menssage' => 'Departament update sussessfully'], 200);     
     }
 
     /**
@@ -47,6 +55,7 @@ class DepartamentoController extends Controller
      */
     public function destroy(Departamento $departamento)
     {
-        //
+        $departamento->delete();
+        return response()->json(['status' => true,'menssage' => 'Departament delete sussessfully'], 200);
     }
 }

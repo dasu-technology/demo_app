@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DepartamentoController;
+use App\Http\Controllers\EmpleadoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,3 +26,10 @@ Route::controller(DepartamentoController::class)->group(function () {
     Route::get('/departamentos', 'index');
     Route::post('/departamento', 'store');
 });
+
+Route::controller(EmpleadoController::class)->group(function () {
+    Route::get('/empleado/{id}', 'show');
+    Route::get('/empleados', 'index');
+    Route::post('/empleado', 'store');
+});
+
