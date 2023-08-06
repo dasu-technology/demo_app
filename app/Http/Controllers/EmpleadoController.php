@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\EmpleadoDTO;
 use App\Interfaces\EmpleadoRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
 class EmpleadoController extends Controller
@@ -30,7 +32,7 @@ class EmpleadoController extends Controller
             'name'=> 'required|string|min:1|max:100',
             'email'=>'required|email|max:80',
             'phone'=>'required|max:15',
-            'departamento_id'=>'required|numeric'
+            'departament_id'=>'required|numeric'
         ];
         $validator = Validator::make($request->input(),$rules);
         if ($validator->fails()){
@@ -39,22 +41,25 @@ class EmpleadoController extends Controller
                 'menssage'=>$validator->errors()->all()
             ],400); 
         }
-        $empleado= new Empleado($request->input());
-        $empleado->save();
-        return response()->json([
-            'status'=>true,
-            'menssage'=>'Empleado creado satisfactoriamente.'
-        ],200); 
+
+        return response()->json(
+            [
+                'data'=> $this->empleadoRepository->createEmpleado($request->input())
+            ]
+        ,Response::HTTP_CREATED); 
     }
 
-    public function show(Empleado $empleado)
+    public function show(string $id)
     {
-        return response()->json($empleado, 200);
+        return response()->json(
+            [
+                'data'=> $this->empleadoRepository->getEmpleadosById($id)
+            ]);
     }
 
     public function update(Request $request, Empleado $empleado)
     {
-        $rules= [
+       /* $rules= [
             'name'=> 'required|string|min:1|max:100',
             'email'=>'required|email|max:80',
             'phone'=>'required|max:15',
@@ -66,21 +71,18 @@ class EmpleadoController extends Controller
                 'status'=>true,
                 'menssage'=>$validator->errors()->all()
             ],400); 
-        }
-        $empleado->update($request->input());
-        return response()->json([
-            'status'=>true,
-            'menssage'=>'Empleado actualizado satisfactoriamente.'
-        ],200);
+        }*/
+        
+        return response()->json(
+             [
+                 'data'=>$this->empleadoRepository->updateEmpleado($empleado->id,$request->input())
+             ]);
     }
 
-    public function destroy(Empleado $empleado)
+    public function destroy(string $id)
     {
-        $empleado->delete();
-        return response()->json([
-            'status'=>true,
-            'menssage'=>'Empleado eliminado satisfactoriamente.'
-        ],200);
+        $this->empleadoRepository->deleteEmpleado($id);
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
     /*public function empleadoDepartamento(){
@@ -92,12 +94,4 @@ class EmpleadoController extends Controller
         
         return response()->json($empleados);
     }*/
-
-    public function findAll()
-    {
-       $empleados = Empleado::select('empleados.*','departamentos.name as departamento')
-       ->join('departamentos','departamentos.id','=','empleados.departament_id')
-       ->get();
-       return response()->json($empleados);
-    }
 }

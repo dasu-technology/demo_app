@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DTO\EmpleadoDTO;
 use App\Interfaces\EmpleadoRepositoryInterface;
 use App\Models\Empleado;
 
@@ -11,7 +12,7 @@ class EmpleadoRepository implements EmpleadoRepositoryInterface
     {
         return Empleado::select('empleados.*','departamentos.name as departamento')
         ->join('departamentos','departamentos.id','=','empleados.departament_id')
-        ->paginate(10);
+        ->get();
     }
 
     public function getEmpleadosById($empleadoId)

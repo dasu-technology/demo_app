@@ -2,6 +2,8 @@
 
 namespace App\Interfaces;
 
+use App\DTO\EmpleadoDTO;
+
 interface EmpleadoRepositoryInterface
 {
     public function getAllEmpleados();
