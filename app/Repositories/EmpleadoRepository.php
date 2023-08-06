@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\DTO\EmpleadoDTO;
 use App\Interfaces\EmpleadoRepositoryInterface;
 use App\Models\Empleado;
 

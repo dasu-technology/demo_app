@@ -2,60 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Departamento;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator as FacadesValidator;
+use App\Http\Requests\DepartamentoRequest;
+use App\Interfaces\DepartamentoRepositoryInterface;
+use App\Repositories\DepartamentoRepository as RepositoriesDepartamentoRepository;
+use Illuminate\Http\Response;
 
 class DepartamentoController extends Controller
 {
+    protected RepositoriesDepartamentoRepository $departamentoRepository;
+
+    public function __construct(DepartamentoRepositoryInterface $departamentoRepository)
+    {
+        $this->departamentoRepository = $departamentoRepository;
+    }
+   
     public function index()
     {
-        $departamentos = Departamento::all();
-        return response()->json($departamentos);
+        return response()->json([
+            'data' => $this->departamentoRepository->getAllDepartamentos()
+        ]);
     }
 
-    public function store(Request $request)
+    public function store(DepartamentoRequest $request)
     {
-        $rules = ['name' => 'required|string|min:1|max:100'];
-        $validatior= FacadesValidator::make($request->input(),$rules);
-        if ($validatior->fails()){
-            return response()->json([
-                'status' => true,
-                'errors' => $validatior->errors()->all()
-            ], 400);
-        }
-        $departamento= new Departamento($request->input());
-        $departamento->save();
-        return response()->json(['status' => true,'menssage' => 'Departament created sussessfully'], 200);
+        $validated = $request->validated();
+        return response()->json(
+            [
+                'data'=> $this->departamentoRepository->createDepartamento($request->input())
+            ]
+        ,Response::HTTP_CREATED); 
     }
 
-    public function show(Departamento $departamento)
+    public function show(string $id)
     {
-        return response()->json($departamento, 200);
+        return response()->json(
+            [
+                'data'=> $this->departamentoRepository->getDepartamentoById($id)
+            ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Departamento $departamento)
-    { $rules = ['name' => 'required|string|min:1|max:100'];
-        $validatior= FacadesValidator::make($request->input(),$rules);
-        if ($validatior->fails()){
-            return response()->json([
-                'status' => true,
-                'errors' => $validatior->errors()->all()
-            ], 400);
-        }
-        $departamento->update($request->input());
-        return response()->json(['status' => true,'menssage' => 'Departament update sussessfully'], 200);     
+    public function update(string $id, DepartamentoRequest $request)
+    { 
+        $validated = $request->validated();
+        return response()->json(
+            [
+                'data'=>$this->departamentoRepository->updateDepartamento($id,$request->input())
+            ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Departamento $departamento)
-    {
-        $departamento->delete();
-        return response()->json(['status' => true,'menssage' => 'Departament delete sussessfully'], 200);
+    public function destroy (string $id){
+        $this->departamentoRepository->deleteDepartamento($id);
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 }

@@ -20,11 +20,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('departamentos', DepartamentoController::class);
-Route::resource('empleados', EmpleadoController::class);
+Route::controller(DepartamentoController::class)->group(function () {
+    Route::get('/departamento','index');
+    Route::get('/departamento/{id}','show');
+    Route::post('/departamento','store');
+    Route::put('departamento/{id}','update');
+    Route::delete('departamento/{id}','destroy');
+});
+
 Route::controller(EmpleadoController::class)->group(function () {
-   /* Route::get('/empleadoDepartamento}', 'empleadoDepartamento');*/
+    Route::get('/empleado','index');
     Route::get('/empleado/{id}','show');
+    Route::post('/empleado','store');
     Route::put('empleado/{id}','update');
     Route::delete('empleado/{id}','destroy');
 });
