@@ -28,7 +28,7 @@ class DepartamentoController extends Controller
         $validated = $request->validated();
         return response()->json(
             [
-                'data'=> $this->departamentoRepository->createDepartamento($request->input())
+                'data'=> $this->departamentoRepository->createDepartamento($validated)
             ]
         ,Response::HTTP_CREATED); 
     }
@@ -46,7 +46,7 @@ class DepartamentoController extends Controller
         $validated = $request->validated();
         return response()->json(
             [
-                'data'=>$this->departamentoRepository->updateDepartamento($id,$request->input())
+                'data'=>$this->departamentoRepository->updateDepartamento($id,$validated)
             ]);
     }
 

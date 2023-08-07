@@ -29,7 +29,7 @@ class EmpleadoController extends Controller
 
         return response()->json(
             [
-                'data'=> $this->empleadoRepository->createEmpleado($request->input())
+                'data'=> $this->empleadoRepository->createEmpleado($validated)
             ]
         ,Response::HTTP_CREATED); 
     }
@@ -42,12 +42,12 @@ class EmpleadoController extends Controller
             ]);
     }
 
-    public function update(string $id, Request $request)
+    public function update(string $id, EmpleadoRequest $request)
     {   
-       // $validated = $request->safe()->only(['name', 'email', 'phone']);
+        $validated = $request->safe()->only(['name', 'email', 'phone']);
         return response()->json(
              [
-                 'data'=>$this->empleadoRepository->updateEmpleado($id,$request->input())
+                 'data'=>$this->empleadoRepository->updateEmpleado($id,$validated)
              ]);
     }
 
